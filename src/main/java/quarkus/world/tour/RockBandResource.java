@@ -41,9 +41,9 @@ public class RockBandResource {
     }
 
     @POST
-    public Uni<Response> addOne(Band band) {
+    public Uni<Band> addOne(Band band) {
         return Panache.withTransaction(band::persistAndFlush)
-                .replaceWith(Response.status(Response.Status.CREATED).entity(band).build());
+                .replaceWith(band);
     }
 
 }
