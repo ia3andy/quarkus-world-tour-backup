@@ -1,6 +1,8 @@
 package quarkus.world.tour;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
+
+import io.quarkus.hibernate.reactive.panache.PanacheEntity;
+import io.smallrye.mutiny.Multi;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,8 +24,8 @@ public class Band extends PanacheEntity {
 
     public boolean alive;
 
-    public static List<Band> stillAlive() {
-        return Band.list("alive", true);
+    public static Multi<Band> stillAlive() {
+        return Band.stream("alive", true);
     }
 
 }
