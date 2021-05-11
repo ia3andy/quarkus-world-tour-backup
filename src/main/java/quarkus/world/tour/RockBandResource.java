@@ -1,7 +1,13 @@
 package quarkus.world.tour;
 
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+
 import javax.transaction.Transactional;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.util.List;
@@ -15,17 +21,17 @@ public class RockBandResource {
     }
 
     @GET
-    @Path("/alive")
+    @Path("alive")
     public List<Band> getAlive() {
         return Band.stillAlive();
     }
 
     @GET
-    @Path("/{id}")
+    @Path("{id}")
     public Band getOne(@PathParam("id") long id) {
-        Band band = Band.findById(id);
+        final Band band = Band.findById(id);
         if (band == null) {
-            throw new WebApplicationException(404);
+           throw new NotFoundException(id + " was not found");
         }
         return band;
     }
@@ -34,7 +40,7 @@ public class RockBandResource {
     @Transactional
     public Response addOne(Band band) {
         band.persist();
-        return Response.created(UriBuilder.fromPath("/band/" + band.id).build()).build();
+        return Response.created(UriBuilder.fromPath("/rock/" + band.id).build()).build();
     }
 
 }
